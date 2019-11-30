@@ -1,7 +1,24 @@
 import React from 'react'
 import store from './store'
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
 
 class Players extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      showAddPlayer: false
+    };
+  }
+
+  toggleModal = (name, value) => {
+    const newState = {...this.state};
+    newState[name] = value;
+    this.setState(newState);
+  };
+
 
   renderPlayers(players) {
     return players.map((player, index) => {
@@ -70,9 +87,57 @@ class Players extends React.Component {
           </tbody>
         </table>
 
-        <button onClick={() => this.publish()}>
+        <Modal show={this.state.showAddPlayer} onHide={() => this.toggleModal('showAddPlayer', false)}>
+          <Modal.Body>
+            <Form>
+              <Form.Group controlId="addPlayerId">
+                <Form.Label>Player</Form.Label>
+                <Form.Control as="select">
+                  <option>Abe Adams</option>
+                  <option>Bjorn Biffel</option>
+                  <option>Cameron Case</option>
+                </Form.Control>
+              </Form.Group>
+              <Form.Check inline
+                          type={'checkbox'}
+                          id={'buyInId'}
+                          label={'Buy-In'}
+              />
+              <Form.Check inline
+                          type={'checkbox'}
+                          id={'tocId'}
+                          label={'Annual TOC'}
+              />
+              <Form.Check inline
+                          type={'checkbox'}
+                          id={'qtocId'}
+                          label={'Quarterly TOC'}
+              />
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => this.toggleModal('showAddPlayer', false)}>
+              Cancel
+            </Button>
+            {/*<Button variant="primary" onClick={() => this.toggleModal('showAddPlayer', false)}>*/}
+            {/*  Add Player*/}
+            {/*</Button>*/}
+            <Button variant="primary" onClick={() => {
+              // this.toggleModal('showAddPlayer', false);
+              this.publish();
+            }}>
+              Add Player
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        <Button variant="primary" onClick={() => this.toggleModal('showAddPlayer', true)}>
           Add Player
-        </button>
+        </Button>
+
+        {/*<button onClick={() => this.publish()}>*/}
+        {/*  Add Player*/}
+        {/*</button>*/}
       </div>
     );
   }
